@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: tameeni-dashboard
+    env: static
+    buildCommand: echo "No build required for static site"
+    staticPublishPath: /dashboard
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: PORT
+        value: 10000

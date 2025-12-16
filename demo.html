@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض تجريبي - لوحة تحكم تأميني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* نفس التنسيقات من styles.css */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            direction: rtl;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .demo-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .demo-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .demo-card h3 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .demo-card p {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-warning {
+            background-color: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        .feature-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .feature-list h3 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .feature-icon.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .feature-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+        .feature-icon.yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .feature-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .feature-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        .demo-simulator {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .simulator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .simulator-header h3 {
+            color: #1e293b;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .segmented {
+            display: flex;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid #d1d5db;
+            margin-bottom: 1rem;
+        }
+
+        .segmented button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            background-color: #fff;
+            font-size: 0.875rem;
+            cursor: pointer;
+            color: #6b7280;
+            font-family: inherit;
+            font-weight: 400;
+        }
+
+        .segmented button + button {
+            border-right: 1px solid #d1d5db;
+        }
+
+        .segmented button.active {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.show {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .stats-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .stats-preview h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🚀 لوحة تحكم تأميني</h1>
+            <p>استعرض المميزات وتجربة لوحة التحكم التفاعلية</p>
+        </div>
+
+        <div class="stats-preview">
+            <h3>إحصائيات حية (تجريبية)</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="demoTotal">24</div>
+                    <div class="stat-label">إجمالي الطلبات</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="demoToday">8</div>
+                    <div class="stat-label">طلبات اليوم</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="demoNew">16</div>
+                    <div class="stat-label">تأمين جديد</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="demoTransfer">8</div>
+                    <div class="stat-label">نقل ملكية</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-grid">
+            <div class="demo-card">
+                <h3>📊 لوحة التحكم</h3>
+                <p>واجهة احترافية لمراجعة وإدارة جميع طلبات التأمين مع إحصائيات مفصلة ورسوم بيانية تفاعلية.</p>
+                <a href="index.html" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-tachometer-alt"></i>
+                    عرض لوحة التحكم
+                </a>
+            </div>
+
+            <div class="demo-card">
+                <h3>📱 تصميم متجاوب</h3>
+                <p>تعمل بشكل مثالي على جميع الأجهزة - الحاسوب، الجهاز اللوحي، والهاتف المحمول مع تجربة مستخدم سلسة.</p>
+                <a href="#" class="btn btn-secondary" onclick="showResponsiveDemo()">
+                    <i class="fas fa-mobile-alt"></i>
+                    تجربة التجاوب
+                </a>
+            </div>
+
+            <div class="demo-card">
+                <h3>🔍 بحث وتصفية</h3>
+                <p>نظام بحث متقدم وتصفية ذكية للعثور على الطلبات بسرعة مع إمكانية التصدير والحفظ.</p>
+                <a href="index.html#requests" class="btn btn-success" target="_blank">
+                    <i class="fas fa-search"></i>
+                    جرب البحث
+                </a>
+            </div>
+        </div>
+
+        <div class="feature-list">
+            <h3>✨ المميزات الرئيسية</h3>
+            <div class="feature-item">
+                <div class="feature-icon blue">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div>
+                    <h4>إحصائيات مفصلة</h4>
+                    <p>تحليلات شاملة لبيانات التأمين مع رسوم بيانية تفاعلية</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon green">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div>
+                    <h4>إشعارات فورية</h4>
+                    <p>تنبيهات فورية عند وصول طلبات جديدة مع إمكانية التخصيص</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon yellow">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div>
+                    <h4>تصدير البيانات</h4>
+                    <p>تصدير جميع البيانات بصيغة JSON للنسخ الاحتياطي والمعالجة</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon purple">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div>
+                    <h4>إعدادات قابلة للتخصيص</h4>
+                    <p>تخصيص الواجهة والإعدادات حسب احتياجاتك</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon red">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <h4>أمان وخصوصية</h4>
+                    <p>حماية كاملة للبيانات مع تخزين محلي آمن</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-simulator">
+            <div class="simulator-header">
+                <h3>🎯 محاكي إرسال البيانات</h3>
+                <button class="btn btn-warning" onclick="addDemoData()">
+                    <i class="fas fa-plus"></i>
+                    إضافة بيانات تجريبية
+                </button>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>نوع العرض</label>
+                    <div class="segmented" id="demoOfferType">
+                        <button class="active" data-value="new">تأمين جديد</button>
+                        <button data-value="transfer">نقل ملكية</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>نوع التسجيل</label>
+                    <div class="segmented" id="demoRegType">
+                        <button class="active" data-value="serial">رقم تسلسلي</button>
+                        <button data-value="customs">بطاقة جمركية</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>الاسم الكامل</label>
+                    <input type="text" id="demoName" placeholder="أدخل الاسم">
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف</label>
+                    <input type="tel" id="demoPhone" placeholder="05xxxxxxxx">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>رقم الهوية</label>
+                    <input type="text" id="demoId" placeholder="رقم الهوية">
+                </div>
+                <div class="form-group">
+                    <label>الرقم التسلسلي</label>
+                    <input type="text" id="demoSerial" placeholder="الرقم التسلسلي">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>تاريخ الميلاد (اختياري)</label>
+                    <input type="date" id="demoBirth">
+                </div>
+                <div class="form-group">
+                    <label>سنة الصنع (اختياري)</label>
+                    <input type="number" id="demoYear" placeholder="2023">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="simulateSubmission()" style="width: 100%; margin-top: 1rem;">
+                <i class="fas fa-paper-plane"></i>
+                إرسال طلب تجريبي
+            </button>
+        </div>
+    </div>
+
+    <div class="notification" id="demoNotification">
+        <i class="fas fa-check-circle"></i>
+        <span>تم إرسال الطلب التجريبي بنجاح!</span>
+    </div>
+
+    <script>
+        // إعداد الsegmented buttons التجريبية
+        function setupDemoSegmented(id) {
+            const container = document.getElementById(id);
+            const buttons = container.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                });
+            });
+        }
+
+        setupDemoSegmented('demoOfferType');
+        setupDemoSegmented('demoRegType');
+
+        // محاكاة إرسال البيانات
+        function simulateSubmission() {
+            const name = document.getElementById('demoName').value;
+            const phone = document.getElementById('demoPhone').value;
+            const id = document.getElementById('demoId').value;
+            const serial = document.getElementById('demoSerial').value;
+            const birth = document.getElementById('demoBirth').value;
+            const year = document.getElementById('demoYear').value;
+
+            if (!name || !phone || !id || !serial) {
+                alert('الرجاء ملء جميع الحقول المطلوبة');
+                return;
+            }
+
+            // جمع البيانات
+            const demoData = {
+                userName: name,
+                phoneNumber: phone,
+                offerType: document.querySelector('#demoOfferType .active').dataset.value,
+                regType: document.querySelector('#demoRegType .active').dataset.value,
+                idNumber: id,
+                serialNumber: serial,
+                birthDate: birth || null,
+                carYear: year || null,
+                timestamp: new Date().toISOString()
+            };
+
+            // حفظ البيانات تجريبياً
+            const demoRequests = JSON.parse(localStorage.getItem('demoRequests') || '[]');
+            demoRequests.push({
+                id: Date.now().toString(),
+                ...demoData
+            });
+            localStorage.setItem('demoRequests', JSON.stringify(demoRequests));
+
+            // تحديث الإحصائيات
+            updateDemoStats();
+
+            // إظهار إشعار النجاح
+            showNotification('تم إرسال الطلب التجريبي بنجاح! 🎉');
+
+            // مسح النموذج
+            document.getElementById('demoName').value = '';
+            document.getElementById('demoPhone').value = '';
+            document.getElementById('demoId').value = '';
+            document.getElementById('demoSerial').value = '';
+            document.getElementById('demoBirth').value = '';
+            document.getElementById('demoYear').value = '';
+        }
+
+        // تحديث الإحصائيات التجريبية
+        function updateDemoStats() {
+            const requests = JSON.parse(localStorage.getItem('demoRequests') || '[]');
+            const today = new Date().toDateString();
+            
+            const todayRequests = requests.filter(req => 
+                new Date(req.timestamp).toDateString() === today
+            ).length;
+            
+            const newInsurance = requests.filter(req => req.offerType === 'new').length;
+            const transfers = requests.filter(req => req.offerType === 'transfer').length;
+
+            document.getElementById('demoTotal').textContent = requests.length + 24;
+            document.getElementById('demoToday').textContent = todayRequests + 8;
+            document.getElementById('demoNew').textContent = newInsurance + 16;
+            document.getElementById('demoTransfer').textContent = transfers + 8;
+        }
+
+        // إضافة بيانات تجريبية
+        function addDemoData() {
+            const sampleData = [
+                {
+                    userName: 'أحمد محمد السعد',
+                    phoneNumber: '0501234567',
+                    offerType: 'new',
+                    regType: 'serial',
+                    idNumber: '1234567890',
+                    serialNumber: 'ABC123456'
+                },
+                {
+                    userName: 'فاطمة أحمد الغامدي',
+                    phoneNumber: '0509876543',
+                    offerType: 'transfer',
+                    regType: 'customs',
+                    idNumber: '0987654321',
+                    serialNumber: 'CUS789012',
+                    birthDate: '1990-05-15',
+                    carYear: '2020'
+                },
+                {
+                    userName: 'محمد عبدالله القحطاني',
+                    phoneNumber: '0505555555',
+                    offerType: 'new',
+                    regType: 'serial',
+                    idNumber: '1111111111',
+                    serialNumber: 'DEF456789'
+                }
+            ];
+
+            const demoRequests = JSON.parse(localStorage.getItem('demoRequests') || '[]');
+            
+            sampleData.forEach(data => {
+                demoRequests.push({
+                    id: Date.now() + Math.random(),
+                    ...data,
+                    timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString()
+                });
+            });
+
+            localStorage.setItem('demoRequests', JSON.stringify(demoRequests));
+            updateDemoStats();
+            showNotification('تم إضافة بيانات تجريبية! 📊');
+        }
+
+        // إظهار الإشعارات
+        function showNotification(message) {
+            const notification = document.getElementById('demoNotification');
+            notification.querySelector('span').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // عرض تجربة التجاوب
+        function showResponsiveDemo() {
+            alert('تجربة التجاوب:\n\n• جرب تصغير النافذة لرؤية التصميم المتجاوب\n• لوحة التحكم تتكيف تلقائياً مع حجم الشاشة\n• جميع العناصر تبقى قابلة للاستخدام على الهاتف المحمول');
+        }
+
+        // تحديث الإحصائيات عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDemoStats();
+        });
+
+        // إضافة تأثيرات بصرية
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.demo-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+            });
+        });
+
+        // إضافة CSS للتأثيرات
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

